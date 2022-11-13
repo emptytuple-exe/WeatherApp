@@ -28,7 +28,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final myController = TextEditingController();
   late String title;
-  String text = "No Value Entered";
+  String text = "";
 
   @override
   void dispose() {
@@ -63,37 +63,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: TextField(
                     onChanged: (value) => title = value,
                     textAlign: TextAlign.center,
-                    decoration: InputDecoration(hintText: 'Enter city name'),
+                    decoration: InputDecoration(hintText: 'Enter ZIP and country code to continue (eg. \"94203,us\")'),
                     controller: myController,
                   ),
                   width: MediaQuery.of(context).size.width * 0.5,
                 ),
 
+                const SizedBox(
+                  height: 20,
+                ),
                 //////////////////////////
                 ElevatedButton(
                     onPressed: _setText,
                     style: ButtonStyle(
                         elevation: MaterialStateProperty.all(8),
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blueGrey)),
+                        MaterialStateProperty.all(Colors.blueGrey)),
                     child: const Text('Submit')),
-                // RaisedButton is deprecated and should not be used
-                // Use ElevatedButton instead
 
-                // RaisedButton(
-                //     onPressed: _setText,
-                //     child: Text('Submit'),
-                //     elevation: 8,
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
-                Text(text),
+
+                  Text("Showing weather details for ${text}"),
 
                 //////////////
 
                 FutureBuilder(
-                    future: apicall(),
+                    future: apicall(text),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Column(
@@ -168,57 +165,57 @@ class _MyHomePageState extends State<MyHomePage> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.blueGrey,
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.blueGrey,
                                       ),
-                                    height: 80,
-                                    width: 300,
+                                      height: 80,
+                                      width: 300,
                                       child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                         children: [
-                                          Text("Temperature: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
-                                          Text("${snapshot.data['temp'].toString()}\u00B0F"),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text("Temperature: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
+                                              Text("${snapshot.data['temp'].toString()}\u00B0F"),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.blueGrey,
-                                ),
-                                height: 80,
-                                width: 300,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.blueGrey,
+                                    ),
+                                    height: 80,
+                                    width: 300,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          "Feels like: ",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Feels like: ",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14.0),
+                                            ),
+                                            Text(
+                                                "${snapshot.data['feelsLike'].toString()}\u00B0F"),
+                                          ],
                                         ),
-                                        Text(
-                                            "${snapshot.data['feelsLike'].toString()}\u00B0F"),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ] //children
-                                ),
+                                  ),
+                                ] //children
+                            ),
                             Row(children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -302,15 +299,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         mainAxisAlignment:
                                         MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "Sunrise:",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14.0),
-                                          ),
-                                          Text(
-                                              "${(DateTime.fromMillisecondsSinceEpoch((snapshot.data['sr'])))}"),
-                                          // Image.network('http://openweathermap.org/img/w/${json['weather']['icon']}.png',),
+                                          Text("Location: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
+                                          Text("${snapshot.data['lo'].toString()}"),
                                         ],
                                       ),
                                     ],
@@ -331,9 +321,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     Row(
                                       mainAxisAlignment:MainAxisAlignment.center,
                                       children: [
-                                        Text("Sunset: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
-                                        Text(
-                                            "${(DateTime.fromMillisecondsSinceEpoch((snapshot.data['ss'])))}"),
+                                        Text("Country: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
+                                        Text("${snapshot.data['co'].toString()}"),
                                       ],
                                     ),
                                     // Row(
@@ -355,7 +344,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       } //else
                     } //builder
 
-                    )
+                )
               ],
             )
           ],
@@ -363,9 +352,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Future apicall() async {
+Future apicall(String a) async {
+
   final url = Uri.parse(
-      "https://api.openweathermap.org/data/2.5/weather?zip=560048,in&appid=6f5f72d25bfbad1f08126182ee55dd6e");
+      "https://api.openweathermap.org/data/2.5/weather?zip=${a}&appid=6f5f72d25bfbad1f08126182ee55dd6e");
   final response = await http.get(url);
   print(response.body);
   final json = jsonDecode(response.body);
@@ -380,6 +370,8 @@ Future apicall() async {
     'max':json['main']['temp_max'],
     'sr': json['sys']['sunrise'],
     'ss':json['sys']['sunset'],
+    'lo':json['name'],
+    'co':json['sys']['country']
     //'ico': json["weather"]["icon"],
   };
   return output;
