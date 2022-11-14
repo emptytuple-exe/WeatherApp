@@ -53,7 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(color: Color(0xff230000)),
           ),
         ),
-        body: Row(
+        body:
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
@@ -85,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 20,
                 ),
 
-                  Text("Showing weather details for ${text}"),
+                Text("Showing weather details for ${text}"),
 
                 //////////////
 
@@ -299,6 +300,70 @@ class _MyHomePageState extends State<MyHomePage> {
                                         mainAxisAlignment:
                                         MainAxisAlignment.center,
                                         children: [
+                                          Text(
+                                            "Sunrise: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14.0),
+                                          ),
+                                          Text(
+                                              "${snapshot.data['rr'].toString()} IST"),
+                                          // Image.network('http://openweathermap.org/img/w/${json['weather']['icon']}.png',),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.blueGrey,
+                                ),
+                                height: 80,
+                                width: 300,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:MainAxisAlignment.center,
+                                      children: [
+                                        Text("Sunset: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
+                                        Text(
+                                            "${snapshot.data['rs'].toString()} IST")
+                                      ],
+                                    ),
+                                    // Row(
+                                    //   mainAxisAlignment: MainAxisAlignment.center,
+                                    //   children: [
+                                    //     Text()
+                                    //   ],
+                                    // )
+                                  ],
+                                ),
+                              ),
+                            ] //children
+                            ),
+                            Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blueGrey,
+                                  ),
+                                  height: 80,
+                                  width: 300,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
                                           Text("Location: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
                                           Text("${snapshot.data['lo'].toString()}"),
                                         ],
@@ -368,11 +433,10 @@ Future apicall(String a) async {
     'lon': json['coord']['lon'],
     'min':json['main']['temp_min'],
     'max':json['main']['temp_max'],
-    'sr': json['sys']['sunrise'],
-    'ss':json['sys']['sunset'],
+    'rr': "${(DateTime.fromMillisecondsSinceEpoch((json['sys']['sunrise'])*1000)).hour}:${(DateTime.fromMillisecondsSinceEpoch((json['sys']['sunrise'])*1000)).minute}",
+    'rs': "${(DateTime.fromMillisecondsSinceEpoch((json['sys']['sunset'])*1000)).hour}:${(DateTime.fromMillisecondsSinceEpoch((json['sys']['sunset'])*1000)).minute}",
     'lo':json['name'],
     'co':json['sys']['country']
-    //'ico': json["weather"]["icon"],
   };
   return output;
 }
